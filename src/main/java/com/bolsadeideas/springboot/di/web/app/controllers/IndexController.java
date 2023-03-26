@@ -3,6 +3,7 @@ package com.bolsadeideas.springboot.di.web.app.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,14 @@ import com.bolsadeideas.springboot.di.web.app.models.Usuario;
 //Requestmappin es la ruta base por donde deben de pasar las demas url(http:localhost:8080/app/index)
 @RequestMapping("/app")
 public class IndexController {
+	
+	//inyectar texto desde el aplication.properties
+	@Value("${texto.indexcontroller.index.titulo}")
+	private String textoIndex;
+	@Value("${texto.indexcontroller.perfil.titulo}")
+	private String textoPerfil;
+	@Value("${texto.indexcontroller.listar.titulo}")
+	private String textoListar;
 
 	//Existen otras notaciones para mapear los endpoints usar la mas conveniente
 	//por ejemplo @RequestMapping(value="/",method = RequestMethod.GET) 
@@ -23,7 +32,7 @@ public class IndexController {
 	@GetMapping({"/index","/"})
 	//model asigna un mapa(llave-valor) y mostrarlos en el html(no es json)
 	public String index(Model model) {
-		model.addAttribute("titulo", "Hola SpringBoot");
+		model.addAttribute("titulo", textoIndex);
 		//El archivo index.html debe de existir en la ruta src/main/resources/templates/index.html
 		//y debe de ser una pagina html
 		return "index";
@@ -35,14 +44,14 @@ public class IndexController {
 		usuario.setNombre("Pedro");
 		usuario.setApellido("Flores");
 		model.addAttribute("usuario",usuario);
-		model.addAttribute("titulo", "Perfil del usuario: ".concat(usuario.getNombre()));
+		model.addAttribute("titulo", textoPerfil.concat(usuario.getNombre()));
 		return "perfil";
 	}
 	
 	@RequestMapping("listar")
 	public String listar(Model model) {
 		
-		model.addAttribute("titulo", "Listado de usuarios");
+		model.addAttribute("titulo", textoListar);
 		//al estar en un ModelAttribute la lista esta disponible para todos los
 		//metodos del controlador
 		//model.addAttribute("usuarios", usuarios);

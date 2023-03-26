@@ -1,5 +1,7 @@
 package com.bolsadeideas.springboot.di.web.app.controllers;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +41,18 @@ public class EjemploParamsController {
 	
 	//Metodo que recibe mas de un parametro y de diferente tipo en la url
 	@GetMapping("/mix-params")
-	public String param(@RequestParam String texto,@RequestParam Integer numero, Model model) {
+	//Se pude optimizar para no solo recibir parametro por parametro
+	//si no recibir todos y sacarlos del reques
+	//public String param(@RequestParam String texto,@RequestParam Integer numero, Model model) {
+	public String param(HttpServletRequest request, Model model) {
+		String texto = request.getParameter("texto");
+		Integer numero = null;
+		try {
+		numero = Integer.parseInt( request.getParameter("numero"));
+		} catch(NumberFormatException e) {
+			e.printStackTrace(System.out);
+			numero = 0;
+		}
 		model.addAttribute("resultado", "El resultado es: ".concat(texto).concat(" y el numero es ").concat(numero.toString()) );
 		return "params/ver";
 	}
